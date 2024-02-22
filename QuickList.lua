@@ -143,7 +143,7 @@ function ql.new(_table)
     end
 
     --Check if a value exists in the table.
-    --Returns index of value if it exists.
+    --Returns first index of value if it exists.
     --Returns nil if it doesn't.
     function self.find(value)
         local index = nil
@@ -207,7 +207,7 @@ function ql.new(_table)
 
     --Return a new QuickList by flattening nested tables.
     function self.flatten()
-        local flat = ql.new(flattenTable(self))
+        local flat = ql.new(flattenTable(self.t))
         return flat
     end
 
@@ -243,6 +243,7 @@ function ql.new(_table)
         return true
     end
 
+    --Check if a table is a QuickList
     function self.checkql(tab)
         if not type(tab) == 'table' then return false end
         local mt = getmetatable(tab)
@@ -256,6 +257,7 @@ end
 function flattenTable(tab)
     local flat = {}
     for i = 1, #tab do
+        print(tab[i])
         if type(tab[i]) == 'table' then
             for e,j in ipairs(flattenTable(tab[i])) do 
                 table.insert(flat,j)
@@ -270,7 +272,7 @@ end
 function setupql()
     function ql.__index(self, key)
         if tonumber(key) then
-            return self.t[key]
+            return self.t[getNegativeIndex(self, key)]
         end
     end
 
@@ -280,7 +282,7 @@ function setupql()
         local _end = #self.t
         local _inter = 1
         if #index > 1 then
-            _end = index[2]
+            _end = getNegativeIndex(self, index[2])
             if #index == 3 then
                 _inter = index[3]
             end
@@ -329,6 +331,12 @@ function concat(tab, sep)
         end
     end
     return str
+end
+
+function getNegativeIndex(tab, index)
+    if index < 1 then
+        return #tab + index
+    end
 end
 
 return ql.new
