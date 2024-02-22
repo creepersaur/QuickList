@@ -9,7 +9,7 @@ Just `require(path)` to the QuickList module. Then use the returned value to mak
 local _ = require('QuickList')
 local myTable = _{
     'Hello',
-    "World,
+    "World",
     123
 }
 
