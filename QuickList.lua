@@ -269,6 +269,12 @@ function ql.new(_table)
 		return res
 	end
 
+    function self.setEach(func)
+        self.enumerate(function (i,v)
+            self[i] = func(i,v)
+        end)
+    end
+
 	self = setmetatable(self, ql)
 	return self
 end
