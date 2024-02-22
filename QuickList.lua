@@ -12,7 +12,7 @@ function ql.new(_table)
     self.copy() : QuickList
     ]]
     function self.copy()
-        return ql.new(self)
+        return ql.new(self.t)
     end
 
     --[[Insert a value at a specific index. Anything infront will be pushed forward.
@@ -214,12 +214,14 @@ function ql.new(_table)
     --Get the average of all number values inside the table.
     function self.average()
         local average = 0
+        local n = 0
         self.forEach(function (v)
             if tonumber(v) then
                 average = average + v
+                n = n + 1
             end
         end)
-        return average/#self
+        return average/n
     end
 
     --Check if the QuickList starts with a given sequence (table) of elements.
@@ -250,6 +252,16 @@ function ql.new(_table)
         return mt and mt.__index == ql
     end
 
+    function self.sum()
+        local res = 0
+        self.forEach(function (v)
+            if tonumber(v) then
+                res = res + tonumber(v)
+            end
+        end)
+        return res
+    end
+
     self = setmetatable(self, ql)
     return self
 end
@@ -267,6 +279,36 @@ function flattenTable(tab)
         end
     end
     return flat
+end
+
+function checkql(tab)
+    if not type(tab) == 'table' then return false end
+    local mt = getmetatable(tab)
+    return mt and mt.__index == ql
+end
+
+function concat(tab, sep)
+    local str = ""
+    for i, v in ipairs(tab) do
+        if checkql(v) then
+            str = str .. tostring(v)
+        elseif type(v) == 'table' then
+            str = str .. tostring(ql.new(v))
+        else
+            str = str .. tostring(v)
+        end
+        if i < #tab then
+            str = str .. sep
+        end
+    end
+    return str
+end
+
+function getNegativeIndex(tab, index)
+    if index < 1 then
+        return #tab + index
+    end
+    return index
 end
 
 function setupql()
@@ -306,37 +348,55 @@ function setupql()
     function ql.__newindex(self, key, value)
         self.t[key] = value
     end
+
+    function ql.__eq(self,other)
+        local res = true
+        self.enumerate(function (i,v)
+            if v ~= other[i] then
+                res = false
+                return
+            end
+        end)
+        return res
+    end
+
+    function ql.__add(self, other)
+        local copy = self.copy()
+        copy.enumerate(function(i,v)
+            if #other < i then return end
+            pcall(function ()
+                copy[i] = v + other[i]
+            end)
+        end)
+        return copy
+    end
+
+    function ql.lt(self, other)
+        if self.sum() < other.sum() then
+            return true
+        end
+        return false
+    end
+
+    function ql.le(self, other)
+        return ql.lt(self,other) or self.sum() == other.sum()
+    end
+
+    function ql.__concat(self, other)
+        local copy = self.copy()
+        copy.forEach(function (i,v)
+            pcall(function ()
+                if type(other) == 'table' then
+                    copy[i] = v..other[i]
+                else
+                    copy[i] = other
+                end
+            end)
+        end)
+        return copy
+    end
 end
 
 setupql()
-
-function checkql(tab)
-    if not type(tab) == 'table' then return false end
-    local mt = getmetatable(tab)
-    return mt and mt.__index == ql
-end
-
-function concat(tab, sep)
-    local str = ""
-    for i, v in ipairs(tab) do
-        if checkql(v) then
-            str = str .. tostring(v)
-        elseif type(v) == 'table' then
-            str = str .. tostring(ql.new(v))
-        else
-            str = str .. tostring(v)
-        end
-        if i < #tab then
-            str = str .. sep
-        end
-    end
-    return str
-end
-
-function getNegativeIndex(tab, index)
-    if index < 1 then
-        return #tab + index
-    end
-end
 
 return ql.new
