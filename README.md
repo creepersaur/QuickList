@@ -2,7 +2,26 @@
 
 QuickList is a Lua library for managing arrays efficiently. It provides a set of functions for manipulating arrays in a concise and expressive manner.
 
+# Usage
+Just `require(path)` to the QuickList module. Then use the returned value to make lists. Name the variable anything, but it's best to name it something short (such as ql or underscore)
+```lua
+local _ = require('QuickList')
+local myTable = _{
+    'Hello',
+    "World,
+    123
+}
+
+print(myTable)
+``````md
+# Hello World
+```
+
 ## QuickList Class
+
+### `require('QuickList')`
+
+Returns `ql.new` by default. 
 
 ### `ql.new(_table)`
 
