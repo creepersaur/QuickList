@@ -15,7 +15,7 @@ local myTable = _{
 print(myTable)
 ```
 ```md
-> {Hello World}
+> {Hello, World}
 ```
 
 ## QuickList Class
