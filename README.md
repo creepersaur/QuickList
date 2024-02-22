@@ -272,9 +272,10 @@ Checks if the QuickList ends with a given sequence (table) of elements.
 
 ### `self.checkql(tab)`
 
-Checks if a given table is a QuickList.
-
-**Parameters:**
-- `tab`: Table to check
 **Returns:**
-- boolean: True if it is a QuickList, false if not.
+- boolean: True if the table provided is a QuickList
+
+### `self.sum()`
+
+**Returns:**
+- number: Adds all the number values in the list and gives the sum.
