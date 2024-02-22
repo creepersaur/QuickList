@@ -264,49 +264,11 @@ Checks if the QuickList ends with a given sequence (table) of elements.
 **Returns:**
 - boolean: True if the QuickList ends with the sequence, otherwise false.
 
-## Meta-Methods
-
-Meta-methods define the behavior of the QuickList class.
-
-### `ql.__index(self, key)`
-
-Allows accessing values by index.
-
-### `ql.__call(self, index)`
-
-Enables calling QuickList as a function with index parameters.
-
-### `ql.__len(self)`
-
-Returns the length of the QuickList.
-
-### `ql.__tostring(self)`
-
-Converts QuickList to a string.
-
-### `ql.__newindex(self, key, value)`
-
-Allows setting values by index.
-
-## Utility Functions
-
-These functions are used internally for utility purposes.
-
-### `checkql(tab)`
+### `self.checkql(tab)`
 
 Checks if a given table is a QuickList.
 
-### `flattenTable(tab)`
-
-Flattens nested tables.
-
-### `concat(tab, sep)`
-
-Concatenates values into a string using a separator.
-
 **Parameters:**
-- `tab`: Table to concatenate.
-- `sep`: Separator.
-
+- `tab`: Table to check
 **Returns:**
-- string: Concatenated string.
+- boolean: True if it is a QuickList, false if not.
