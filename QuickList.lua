@@ -76,7 +76,7 @@ function setupCustom()
     ]]
 	function customMethods.append(self, ...)
 		for i,v in {...} do
-			self.insert(nil, v)
+			self.insert(#self.t + 1, v)
 		end
 		return self
 	end
@@ -114,7 +114,7 @@ function setupCustom()
 	end
 
 	--Loop through the list. Callback ( v:Value ).
-	function customMethods.forEach(self, func)
+	function customMethods.forEach(self : typeof(customMethods) & {t:any}, func)
 		for i = 1, #self.t do
 			if func then func(self.t[i]) end
 		end
@@ -122,7 +122,7 @@ function setupCustom()
 	end
 
 	--Loop through the list. Callback ( i:Index, v:Value ).
-	function customMethods.enumerate(self, func)
+	function customMethods.enumerate(self : typeof(customMethods) & {t:any}, func)
 		for i = 1, #self.t do
 			if func then func(i, self.t[i]) end
 		end
@@ -144,7 +144,7 @@ function setupCustom()
 	end
 
 	--Add a value multiple times to the end.
-	function customMethods.rep(self, value, times)
+	function customMethods.rep(self : typeof(customMethods) & {t:any}, value, times)
 		times = times or 1
 		for i = 1, times do
 			self.append(value)
@@ -153,7 +153,7 @@ function setupCustom()
 	end
 
 	--Remove a value at position.
-	function customMethods.remove(self, pos)
+	function customMethods.remove(self : typeof(customMethods) & {t:any}, pos)
 		if tonumber(pos) then
 			table.remove(self.t, pos)
 		else
@@ -173,7 +173,7 @@ function setupCustom()
 	end
 
 	--Move a value from 1 position/index to another.
-	function customMethods.move(self, pos1, pos2)
+	function customMethods.move(self : typeof(customMethods) & {t:any}, pos1, pos2)
 		self.insert(pos2, self.pop(pos1))
 		return self
 	end
@@ -189,7 +189,7 @@ function setupCustom()
 
 	--Split a string into a QuickList
 	-- (string:string, sep:string) : QuickList
-	function customMethods.string(self, str, sep)
+	function customMethods.string(self : typeof(customMethods) & {t:any}, str, sep)
 		sep = sep or " "
 		local result = ql.new()
 		for match in (str .. sep):gmatch("(.-)" .. sep) do
@@ -322,6 +322,7 @@ function setupCustom()
 		self.enumerate(function (i,v)
 			self[i] = func(i,v)
 		end)
+		return self
 	end
 end
 
