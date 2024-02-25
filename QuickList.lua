@@ -21,7 +21,14 @@ function checkql(tab)
 	return mt and mt.__index == ql
 end
 
-function concat(tab, sep)
+function getNegativeIndex(tab, index)
+	if index < 1 then
+		return #tab + index
+	end
+	return index
+end
+
+function concat(tab, sep, scope)
 	local str = ""
 	for i, v in ipairs(tab) do
 		if checkql(v) then
@@ -38,19 +45,36 @@ function concat(tab, sep)
 	return str
 end
 
-function getNegativeIndex(tab, index)
-	if index < 1 then
-		return #tab + index
+function concat_dictionary(tab, sep, scope)
+	local str = ''
+	for i,v in tab do
+		local tabs = string.rep('	', scope + 1)
+		local value = tostring(v)
+		if typeof(v) == 'table' then
+			value = concat_table(v, sep or ',', scope + 1)
+		end
+		local line = "[" .. '"'..i..'"' .. "] = " .. value .. (sep or ',') .. '\n'
+		str = str .. tabs .. line
 	end
-	return index
+	return str
 end
 
-type Function = {
-	i: number,v: any,
-}
+function concat_table(self, sep, scope)
+	local array = true
+	for i,v in self do
+		if type(i) ~= 'number' then
+			array = false
+		end
+	end
+
+	if array then
+		return string.rep('	', scope) .. "{" .. concat(self, sep) .. string.rep('	', scope) .. "}\n"
+	else
+		return "{\n" .. concat_dictionary(self, sep, scope) .. string.rep('	', scope) .. "}"
+	end
+end
 
 local customMethods = {}
-
 function setupCustom()
 	--[[This creates a shallow copy of the table
     self.copy() : QuickList
@@ -160,6 +184,8 @@ function setupCustom()
 			local index = self.find(pos)
 			if index then
 				table.remove(self.t, index)
+			else
+				self.t[pos] = nil
 			end
 		end
 		return self
@@ -312,6 +338,9 @@ function setupCustom()
 		local res = 0
 		self.forEach(function (v)
 			if tonumber(v) then
+
+
+
 				res = res + tonumber(v)
 			end
 		end)
@@ -340,7 +369,7 @@ function ql.new(_table) : typeof(customMethods)
 
 	local self = {t = _table or {}}
 	self = setmetatable(self, ql)
-	
+
 	return self
 end
 
@@ -356,6 +385,8 @@ function setupql()
 				return customMethods[index](self, ...)
 			end
 		end
+
+		return self.t[index]
 	end
 
 	function ql.__call(self, index)
@@ -382,7 +413,7 @@ function setupql()
 	end
 
 	function ql.__tostring(self)
-		return "{" .. concat(self.t, ', ') .. "}"
+		return concat_table(self.t, ', ', 1)
 	end
 
 	function ql.__newindex(self, key, value)
