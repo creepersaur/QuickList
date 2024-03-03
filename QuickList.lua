@@ -358,6 +358,16 @@ function setupCustom()
 		until not copy.find(value)
 		return copy
 	end
+
+	function customMethods.removeIf(self, func)
+		local copy = self.reverse()
+		copy.enumerate(function(i,v)
+			if func(i,v) then
+				copy.remove(i)
+			end
+		end)
+		return copy.reverse()
+	end
 end
 
 setupCustom()
