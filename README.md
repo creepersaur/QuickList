@@ -4,7 +4,7 @@ QuickList is a Lua (class) library for managing arrays efficiently. It provides 
 This was made by creepersaur. Go and subscribe to him on [Youtube](https://youtube.com/c/creepersaur).
 
 # Usage
-Download the `QuickList.lua` from the source code. Or use releases if an updated version is there.
+Download the `QuickList.lua` from the source code. Or use releases if an *older* version is there.
 Just `require(path)` to the QuickList module. Then use the returned value to make lists. Name the variable anything, but it's best to name it something short (such as ql or underscore)
 ```lua
 local _ = require('QuickList')
