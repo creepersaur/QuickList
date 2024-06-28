@@ -1,12 +1,12 @@
-ql = {}
+local ql = {}
 
 function flattenTable(tab)
 	local flat = {}
 	for i = 1, #tab do
 		print(tab[i])
-		if type(tab[i]) == 'table' then
-			for e,j in ipairs(flattenTable(tab[i])) do 
-				table.insert(flat,j)
+		if type(tab[i]) == "table" then
+			for _, j in ipairs(flattenTable(tab[i])) do
+				table.insert(flat, j)
 			end
 		else
 			table.insert(flat, tab[i])
@@ -16,7 +16,9 @@ function flattenTable(tab)
 end
 
 function checkql(tab)
-	if type(tab) ~= 'table' then return false end
+	if type(tab) ~= "table" then
+		return false
+	end
 	local mt = getmetatable(tab)
 	return mt and mt.__index == ql
 end
@@ -28,12 +30,10 @@ function getNegativeIndex(tab, index)
 	return index
 end
 
-function concat(tab, sep, scope)
+function concat(tab, sep, _scope)
 	local str = ""
 	for i, v in ipairs(tab) do
-		if checkql(v) then
-			str = str .. tostring(v)
-		elseif type(v) == 'table' then
+		if type(v) == "table" then
 			str = str .. tostring(ql.new(v))
 		else
 			str = str .. tostring(v)
@@ -46,14 +46,14 @@ function concat(tab, sep, scope)
 end
 
 function concat_dictionary(tab, sep, scope)
-	local str = ''
-	for i,v in tab do
-		local tabs = string.rep('	', scope + 1)
+	local str = ""
+	for i, v in tab do
+		local tabs = string.rep("	", scope + 1)
 		local value = tostring(v)
-		if typeof(v) == 'table' then
-			value = concat_table(v, sep or ',', scope + 1)
+		if typeof(v) == "table" then
+			value = concat_table(v, sep or ",", scope + 1)
 		end
-		local line = "[" .. '"'..i..'"' .. "] = " .. value .. (sep or ',') .. '\n'
+		local line = "[" .. '"' .. i .. '"' .. "] = " .. value .. (sep or ",") .. "\n"
 		str = str .. tabs .. line
 	end
 	return str
@@ -61,16 +61,16 @@ end
 
 function concat_table(self, sep, scope)
 	local array = true
-	for i,v in self do
-		if type(i) ~= 'number' then
+	for i, _ in self do
+		if type(i) ~= "number" then
 			array = false
 		end
 	end
 
 	if array then
-		return string.rep('	', scope) .. "{" .. concat(self, sep) .. string.rep('	', scope) .. "}\n"
+		return string.rep("	", scope) .. "{" .. concat(self, sep) .. string.rep("	", scope) .. "}\n"
 	else
-		return "{\n" .. concat_dictionary(self, sep, scope) .. string.rep('	', scope) .. "}"
+		return "{\n" .. concat_dictionary(self, sep, scope) .. string.rep("	", scope) .. "}"
 	end
 end
 
@@ -82,60 +82,60 @@ function setupCustom()
 	--[[This creates a shallow copy of the table
     self.copy() : QuickList
     ]]
-	function customMethods.copy(self) : QuickList
+	function customMethods.copy(self): QuickList
 		return ql.new(self.t)
 	end
 
-    --[[Insert a value at a specific index. Anything infront will be pushed forward.
+	--[[Insert a value at a specific index. Anything infront will be pushed forward.
     () : self
     ]]
-	function customMethods.insert(self : QuickList & {t:any}, pos, value) : QuickList
-		if pos and (not value) then
-			warn('Position was given (ql.insert()) but value was not. Did you want `ql.append()` ?')
+	function customMethods.insert(self: QuickList & { t: any }, pos, value): QuickList
+		if pos and not value then
+			warn("Position was given (ql.insert()) but value was not. Did you want `ql.append()` ?")
 		end
 		pos = pos or #self.t + 1
 		table.insert(self.t, pos, value)
 		return self
 	end
 
-    --[[Inser a value at the end of the table.
+	--[[Inser a value at the end of the table.
     () : self
     ]]
-	function customMethods.append(self, ...) : QuickList
-		for i,v in {...} do
-			self.insert(#self.t + 1, v)
-		end
-		return self
-	end
-	
-	function customMethods.append_table(self, _table:{}) : QuickList
-		for i,v in _table do
+	function customMethods.append(self, ...): QuickList
+		for _, v in { ... } do
 			self.insert(#self.t + 1, v)
 		end
 		return self
 	end
 
-    --[[Join the table using a separator. (Optional)
+	function customMethods.append_table(self, _table: {}): QuickList
+		for _, v in _table do
+			self.insert(#self.t + 1, v)
+		end
+		return self
+	end
+
+	--[[Join the table using a separator. (Optional)
     () : string
     ]]
-	function customMethods.join(self, sep) : string
-		sep = sep or ''
+	function customMethods.join(self, sep): string
+		sep = sep or ""
 		return concat(self.t, sep)
 	end
 
-    --[[Split the table into 2 tables using an index.
+	--[[Split the table into 2 tables using an index.
     () : QuickList:{QuickList, QuickList}
     ]]
-	function customMethods.split(self, index) : QuickList
+	function customMethods.split(self, index): QuickList
 		index = index or math.ceil(#self / 2)
-		return ql.new { self { 1, index }, self { index + 1, #self } }
+		return ql.new({ self({ 1, index }), self({ index + 1, #self }) })
 	end
 
-    --[[Returns a sorted copy of the table.
+	--[[Returns a sorted copy of the table.
     Use the parameter "descending" to sort descending or provide a function(a,b).
     (Comparison:(Optional)) : QuickList
     ]]
-	function customMethods.sort(self, comp) : QuickList
+	function customMethods.sort(self, comp): QuickList
 		if comp == "descending" then
 			function comp(a, b)
 				return b < a
@@ -148,27 +148,33 @@ function setupCustom()
 	end
 
 	--Loop through the list. Callback ( v:Value ).
-	function customMethods.forEach(self : QuickList & {t:any}, func) : QuickList
+	function customMethods.forEach(self: QuickList & { t: any }, func): QuickList
 		for i = 1, #self.t do
-			if func then func(self.t[i]) end
+			if func then
+				func(self.t[i])
+			end
 		end
 		return self
 	end
 
 	--Loop through the list. Callback ( i:Index, v:Value ).
-	function customMethods.enumerate(self : QuickList & {t:any}, func) : QuickList
+	function customMethods.enumerate(self: QuickList & { t: any }, func): QuickList
 		for i = 1, #self.t do
-			if func then func(i, self.t[i]) end
+			if func then
+				func(i, self.t[i])
+			end
 		end
 		return self
 	end
 
-    --[[Merge a copy of this table with another. Appends the values to the end.
+	--[[Merge a copy of this table with another. Appends the values to the end.
     () : QuickList
     ]]
-	function customMethods.merge(self, tab) : QuickList
-		assert(type(tab) == 'table', 'A QuickList or table must be provided.')
-		if not checkql(tab) then tab = ql.new(tab) end
+	function customMethods.merge(self, tab): QuickList
+		assert(type(tab) == "table", "A QuickList or table must be provided.")
+		if not checkql(tab) then
+			tab = ql.new(tab)
+		end
 
 		local copy = self.copy()
 		tab.forEach(function(v)
@@ -178,16 +184,16 @@ function setupCustom()
 	end
 
 	--Add a value multiple times to the end.
-	function customMethods.rep(self : QuickList & {t:any}, value, times) : QuickList
+	function customMethods.rep(self: QuickList & { t: any }, value, times): QuickList
 		times = times or 1
-		for i = 1, times do
+		for _ = 1, times do
 			self.append(value)
 		end
 		return self
 	end
 
 	--Remove a value at position.
-	function customMethods.remove(self : QuickList & {t:any}, pos) : QuickList
+	function customMethods.remove(self: QuickList & { t: any }, pos): QuickList
 		if tonumber(pos) then
 			table.remove(self.t, pos)
 		else
@@ -202,20 +208,20 @@ function setupCustom()
 	end
 
 	--Removes the value at position, but returns it as well.
-	function customMethods.pop(self, pos) : any
+	function customMethods.pop(self, pos): any
 		local val = self[pos]
 		self.remove(pos)
 		return val
 	end
 
 	--Move a value from 1 position/index to another.
-	function customMethods.move(self : QuickList & {t:any}, pos1, pos2) : QuickList
+	function customMethods.move(self: QuickList & { t: any }, pos1, pos2): QuickList
 		self.insert(pos2, self.pop(pos1))
 		return self
 	end
 
 	--Returns a reversed copy of the table.
-	function customMethods.reverse(self) : QuickList
+	function customMethods.reverse(self): QuickList
 		local newTable = ql.new()
 		for i = #self, 1, -1 do
 			newTable.append(self[i])
@@ -225,7 +231,7 @@ function setupCustom()
 
 	--Split a string into a QuickList
 	-- (string:string, sep:string) : QuickList
-	function customMethods.string(self : QuickList & {t:any}, str, sep) : QuickList
+	function customMethods.string(_self: QuickList & { t: any }, str, sep): QuickList
 		sep = sep or " "
 		local result = ql.new()
 		for match in (str .. sep):gmatch("(.-)" .. sep) do
@@ -237,7 +243,7 @@ function setupCustom()
 	--Check if a value exists in the table.
 	--Returns first index of value if it exists.
 	--Returns nil if it doesn't.
-	function customMethods.find(self, value) : number
+	function customMethods.find(self, value): number
 		local index = nil
 		self.enumerate(function(i, v)
 			if v == value then
@@ -249,7 +255,7 @@ function setupCustom()
 	end
 
 	--Get how many times a value shows up in the table.
-	function customMethods.occurrences(self, value) : number
+	function customMethods.occurrences(self, value): number
 		local occurrences = 0
 		self.forEach(function(v)
 			if v == value then
@@ -262,7 +268,7 @@ function setupCustom()
 	--Return a copy of this table with unique values.
 	--If any value is repeated, it will only show up once.
 	-- () : QuickList
-	function customMethods.unique(self) : QuickList
+	function customMethods.unique(self): QuickList
 		local newTable = ql.new()
 		self.forEach(function(v)
 			if not newTable.find(v) then
@@ -307,18 +313,18 @@ function setupCustom()
 	function customMethods.average(self)
 		local average = 0
 		local n = 0
-		self.forEach(function (v)
+		self.forEach(function(v)
 			if tonumber(v) then
 				average = average + v
 				n = n + 1
 			end
 		end)
-		return average/n
+		return average / n
 	end
 
 	--Check if the QuickList starts with a given sequence (table) of elements.
 	function customMethods.startsWith(self, tab)
-		for i = 1,#tab do
+		for i = 1, #tab do
 			if tab[i] ~= self[i] then
 				return false
 			end
@@ -328,9 +334,9 @@ function setupCustom()
 
 	--Check if the QuickList ends with a given sequence (table) of elements.
 	function customMethods.endsWith(self, tab)
-		local lenDiff = #self-#tab
-		for i = #tab,1,-1 do
-			if tab[i] ~= self[i+lenDiff] then
+		local lenDiff = #self - #tab
+		for i = #tab, 1, -1 do
+			if tab[i] ~= self[i + lenDiff] then
 				return false
 			end
 		end
@@ -338,19 +344,18 @@ function setupCustom()
 	end
 
 	--Check if a table is a QuickList
-	function customMethods.checkql(self, tab)
-		if type(tab) ~= 'table' then return false end
+	function customMethods.checkql(_self, tab)
+		if type(tab) ~= "table" then
+			return false
+		end
 		local mt = getmetatable(tab)
 		return mt and mt.__index == ql
 	end
 
 	function customMethods.sum(self)
 		local res = 0
-		self.forEach(function (v)
+		self.forEach(function(v)
 			if tonumber(v) then
-
-
-
 				res = res + tonumber(v)
 			end
 		end)
@@ -358,8 +363,8 @@ function setupCustom()
 	end
 
 	function customMethods.setEach(self, func)
-		self.enumerate(function (i,v)
-			self[i] = func(i,v)
+		self.enumerate(function(i, v)
+			self[i] = func(i, v)
 		end)
 		return self
 	end
@@ -373,18 +378,20 @@ setupCustom()
 
 -- Creates a new 'QuickList' array. Use ql{values} to make it easier to make a QuickList.
 --Made by creepersaur. Go subscribe to my youtube channel 😀.
-function ql.new(self, _table) : QuickList
+function ql.new(_self, _table): QuickList
 	_table = _table or {}
-	if checkql(_table) then _table = _table.t end
+	if checkql(_table) then
+		_table = _table.t
+	end
 
-	local self = {t = _table or {}} :: QuickList
+	local self = { t = _table or {} } :: QuickList
 	self = setmetatable(self, ql)
 
 	return self
 end
 
 function setupql()
-	ql.__type = 'QuickList'
+	ql.__type = "QuickList"
 	function ql.__index(self, index)
 		if tonumber(index) then
 			return self.t[getNegativeIndex(self, index)]
@@ -399,8 +406,10 @@ function setupql()
 		return self.t[index]
 	end
 
-	function ql.__call(self, index) : QuickList?
-		if type(index) ~= "table" or #index < 1 then return end
+	function ql.__call(self, index): QuickList?
+		if type(index) ~= "table" or #index < 1 then
+			return
+		end
 		local _start = index[1]
 		local _end = #self.t
 		local _inter = 1
@@ -418,21 +427,21 @@ function setupql()
 		return ql.new(newTable)
 	end
 
-	function ql.__len(self) : number
+	function ql.__len(self): number
 		return #self.t
 	end
 
-	function ql.__tostring(self) : string
-		return concat_table(self.t, ', ', 1)
+	function ql.__tostring(self): string
+		return concat_table(self.t, ", ", 1)
 	end
 
 	function ql.__newindex(self, key, value)
 		self.t[key] = value
 	end
 
-	function ql.__eq(self,other) : boolean
+	function ql.__eq(self, other): boolean
 		local res = true
-		self.enumerate(function (i,v)
+		self.enumerate(function(i, v)
 			if v ~= other[i] then
 				res = false
 				return
@@ -441,11 +450,13 @@ function setupql()
 		return res
 	end
 
-	function ql.__add(self, other) : QuickList
+	function ql.__add(self, other): QuickList
 		local copy = self.copy()
-		copy.enumerate(function(i,v)
-			if #other < i then return end
-			pcall(function ()
+		copy.enumerate(function(i, v)
+			if #other < i then
+				return
+			end
+			pcall(function()
 				copy[i] = v + other[i]
 			end)
 		end)
@@ -460,15 +471,15 @@ function setupql()
 	end
 
 	function ql.le(self, other)
-		return ql.lt(self,other) or self.sum() == other.sum()
+		return ql.lt(self, other) or self.sum() == other.sum()
 	end
 
-	function ql.__concat(self, other) : string
+	function ql.__concat(self, other): string
 		local copy = self.copy()
-		copy.forEach(function (i,v)
-			pcall(function ()
-				if type(other) == 'table' then
-					copy[i] = v..other[i]
+		copy.forEach(function(i, v)
+			pcall(function()
+				if type(other) == "table" then
+					copy[i] = v .. other[i]
 				else
 					copy[i] = other
 				end
@@ -481,5 +492,5 @@ end
 setupql()
 
 return setmetatable(ql, {
-	__call = ql.new
+	__call = ql.new,
 })
