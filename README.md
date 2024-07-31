@@ -2,7 +2,7 @@
 
 ![Quicklist_logo|442x154](Quicklist_logo.png)
 
-[![GitHub|107x32](GitHub.svg)](https://github.com/creepersaur/QuickList/) | [![Library|107x32](Library.png)](https://create.roblox.com/store/asset/16472746617) | [![Wally|107x32](Wally.png)](https://wally.run/package/creepersaur/quicklist)
+[![GitHub|107x32](GitHub.svg)](https://github.com/creepersaur/QuickList/) • [![Library|107x32](Library.png)](https://create.roblox.com/store/asset/16472746617) • [![Wally|107x32](Wally.png)](https://wally.run/package/creepersaur/quicklist)
 
 </div>
 
