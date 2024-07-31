@@ -1,4 +1,4 @@
-local ql = {}
+ql = {}
 
 function flattenTable(tab)
 	local flat = {}
