@@ -49,6 +49,7 @@ Output:
 > [!NOTE]
 > `ql.new(_table)`
 > Creates a new 'QuickList' array. Use `ql{values}` to make it easier to create a QuickList.
+> > 
 > **Parameters:**
 > > - `_table`: A QuickList or table (optional).
 > 
@@ -65,6 +66,7 @@ Output:
 > [!NOTE]
 > `self> .insert(pos, value)`
 > Inserts a value at a specific index. Anything in front will be pushed forward.
+> > 
 > **Parameters:**
 > - `pos`: Index to insert the value.
 > - `value`: Value to insert.
@@ -75,7 +77,8 @@ Output:
 > [!NOTE]
 > `self.append(value)`
 > Inserts a value at the end of the table.
-**Parameters:**
+> 
+> **Parameters:**
 > - `value`: Value to append.
 > 
 > **Returns:**
@@ -84,7 +87,8 @@ Output:
 > [!NOTE]
 > `self.join(sep)`
 > Joins the table using a separator. (Optional)
-**Parameters:**
+> 
+> **Parameters:**
 > - `sep`: Separator (optional).
 > 
 > **Returns:**
@@ -93,7 +97,8 @@ Output:
 > [!NOTE]
 > `self.split(index)`
 > Splits the table into two tables using an index.
-**Parameters:**
+> 
+> **Parameters:**
 > - `index`: Index to split the table.
 > 
 > **Returns:**
@@ -102,7 +107,8 @@ Output:
 > [!NOTE]
 > `self.sort(comp)`
 > Returns > a sorted copy of the table. Use the parameter "descending" to sort descending or provide a custom comparison function.
-**Parameters:**
+> 
+> **Parameters:**
 > - `comp`: Comparison function or "descending" (optional).
 > 
 > **Returns:**
@@ -111,7 +117,8 @@ Output:
 > [!NOTE]
 > `self.forEach(func)`
 > Loops through the list. Callback `(v:Value)`.
-**Parameters:**
+> 
+> **Parameters:**
 > - `func`: Callback function.
 > 
 > **Returns:**
@@ -120,7 +127,8 @@ Output:
 > [!NOTE]
 > `self.enumerate(func)`
 > Loops through the list. Callback `(i:Index, v:Value)`.
-**Parameters:**
+> 
+> **Parameters:**
 > - `func`: Callback function.
 > 
 > **Returns:**
@@ -129,7 +137,8 @@ Output:
 > [!NOTE]
 > `self.merge(tab)`
 > Merges a copy of this table with another. Appends the values to the end.
-**Parameters:**
+> 
+> **Parameters:**
 > - `tab`: Another QuickList or table.
 > 
 > **Returns:**
@@ -138,17 +147,19 @@ Output:
 > [!NOTE]
 > `self.rep(value, times)`
 Adds a value multiple times to the en> d.
-**Parameters:**
+> 
+> **Parameters:**
 > - `value`: Value to repeat.
 > - `times`: Number of times to repeat (optional, default is 1).
 > 
 > **Returns:**
-> > - `QuickList`: Modified QuickList.
+> - `QuickList`: Modified QuickList.
 
 > [!NOTE]
 > `self.remove(pos)`
 Removes a value at a specific positio> n.
-**Parameters:**
+> 
+> **Parameters:**
 > - `pos`: Position to remove.
 > 
 > **Returns:**
@@ -157,16 +168,18 @@ Removes a value at a specific positio> n.
 > [!NOTE]
 > `self.pop(pos)`
 Removes the value at a specific position and returns i> t.
-**Parameters:**
+> 
+> **Parameters:**
 > - `pos`: Position to pop.
 > 
 > **Returns:**
-- `Value`: > Removed value.
+> - `Value`: Removed value.
 
 > [!NOTE]
 > `self.move(pos1, pos2)`
 Moves a value from one position/index to anothe> r.
-**Parameters:**
+> 
+> **Parameters:**
 > - `pos1`: Source position.
 > - `pos2`: Destination position.
 > 
@@ -183,7 +196,8 @@ Returns a reversed copy of the tabl> e.
 > [!NOTE]
 > `self.string(str, sep)`
 Splits a string into a QuickLis> t.
-**Parameters:**
+> 
+> **Parameters:**
 > - `str`: Input string.
 > - `sep`: Separator (optional).
 > 
@@ -193,7 +207,8 @@ Splits a string into a QuickLis> t.
 > [!NOTE]
 > `self.> find(value)`
 Checks if a value exists in the table. Returns the index if found, otherwise returns > nil.
-**Parameters:**
+> 
+> **Parameters:**
 > - `value`: Value to find.
 > 
 > **Returns:**
@@ -202,7 +217,8 @@ Checks if a value exists in the table. Returns the index if found, otherwise ret
 > [!NOTE]
 > `self.occurrences(value)`
 Gets the number of times a value shows up in the tabl> e.
-**Parameters:**
+> 
+> **Parameters:**
 > - `value`: Value to count.
 > 
 > **Returns:**
@@ -234,7 +250,7 @@ Returns a shuffled copy of the tabl> e.
 Gets a pseudo-random value from the tabl> e.
 > 
 > **Returns:**
-- `Value`: Random value.
+> - `Value`: Random value.
 
 > [!NOTE]
 > `self.flatten()`
@@ -253,7 +269,8 @@ Gets the average of all number values inside the tabl> e.
 > [!NOTE]
 > `self.startsWith(tab)`
 Checks if the QuickList starts with a given sequence (table) of element> s.
-**Parameters:**
+> 
+> **Parameters:**
 > - `tab`: Sequence to check.
 > 
 > **Returns:**
@@ -262,6 +279,7 @@ Checks if the QuickList starts with a given sequence (table) of element> s.
 > [!NOTE]
 > `self.endsWith(tab)`
 > Checks if the QuickList ends with a given sequence (table) of element> s.
+>
 > **Parameters:**
 > - `tab`: Sequence to check.
 > 
@@ -270,16 +288,18 @@ Checks if the QuickList starts with a given sequence (table) of element> s.
 
 > [!NOTE]
 > `self.checkql(tab)`> 
-> **Returns:> **
+> 
+> **Returns: **
 > - `boolean`: True if the table provided is a QuickList
 
 > [!NOTE]
-> `self.sum()`> 
+> `self.sum()`
 > **Returns: **
 > - `number`: Adds all the number values in the list and gives the sum.
 
 > [!NOTE]
 > `self.retain()`> 
 > Deletes the item inside the QuickList if the function returns false for that item.
+> 
 > **parameters**
 > - `func(i: number, v: any)`
