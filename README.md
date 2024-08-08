@@ -17,6 +17,7 @@ If you use Wally for managing packages, you can install it using the following l
 ```toml
 QuickList = "creepersaur/quicklist@^1.0"
 ```
+For anyone willing to use this on Roblox (as intended), copy the contents of `QuickList.lua` and paste them into a ModuleScript. Then `require(path_to_module)`.
 
 # Example
 ```luau
@@ -29,22 +30,22 @@ local myTable: ql.QuickList = ql {
 
 print(myTable)
 ```
+Output:
 ```md
 > {Hello, World}
 ```
 
-# Roblox Usage
-Read the **Usage** above ^^^.
-For anyone willing to use this on Roblox, copy the contents of `QuickList.lua` and paste them into a ModuleScript. Then `require(PathToModule)`.
-
 ## QuickList Class
 
-### `require('QuickList')`
+### `require(path_to_quicklist)`
+Returns the `Quicklist` export type and `new()` in the same require.
+```luau
+local ql = require(path)
+ql.Quicklist -- this is the type
+ql() or ql{} -- create a new quicklist
+```
 
-Returns `ql.new` by default. 
-
-### `ql.new(_table)`
-
+`ql.new(_table)`
 Creates a new 'QuickList' array. Use `ql{values}` to make it easier to create a QuickList.
 
 **Parameters:**
@@ -53,15 +54,13 @@ Creates a new 'QuickList' array. Use `ql{values}` to make it easier to create a 
 **Returns:**
 - QuickList: A new QuickList array.
 
-### `self.copy()`
-
+`self.copy()`
 Creates a shallow copy of the table.
 
 **Returns:**
 - QuickList: A copy of the QuickList.
 
-### `self.insert(pos, value)`
-
+`self.insert(pos, value)`
 Inserts a value at a specific index. Anything in front will be pushed forward.
 
 **Parameters:**
@@ -71,8 +70,7 @@ Inserts a value at a specific index. Anything in front will be pushed forward.
 **Returns:**
 - QuickList: Modified QuickList.
 
-### `self.append(value)`
-
+`self.append(value)`
 Inserts a value at the end of the table.
 
 **Parameters:**
@@ -81,8 +79,7 @@ Inserts a value at the end of the table.
 **Returns:**
 - QuickList: Modified QuickList.
 
-### `self.join(sep)`
-
+`self.join(sep)`
 Joins the table using a separator. (Optional)
 
 **Parameters:**
@@ -91,8 +88,7 @@ Joins the table using a separator. (Optional)
 **Returns:**
 - string: Joined string.
 
-### `self.split(index)`
-
+`self.split(index)`
 Splits the table into two tables using an index.
 
 **Parameters:**
@@ -101,8 +97,7 @@ Splits the table into two tables using an index.
 **Returns:**
 - QuickList: Two tables resulting from the split.
 
-### `self.sort(comp)`
-
+`self.sort(comp)`
 Returns a sorted copy of the table. Use the parameter "descending" to sort descending or provide a custom comparison function.
 
 **Parameters:**
@@ -111,8 +106,7 @@ Returns a sorted copy of the table. Use the parameter "descending" to sort desce
 **Returns:**
 - QuickList: Sorted copy of the table.
 
-### `self.forEach(func)`
-
+`self.forEach(func)`
 Loops through the list. Callback `(v:Value)`.
 
 **Parameters:**
@@ -121,8 +115,7 @@ Loops through the list. Callback `(v:Value)`.
 **Returns:**
 - QuickList: Modified QuickList.
 
-### `self.enumerate(func)`
-
+`self.enumerate(func)`
 Loops through the list. Callback `(i:Index, v:Value)`.
 
 **Parameters:**
@@ -131,8 +124,7 @@ Loops through the list. Callback `(i:Index, v:Value)`.
 **Returns:**
 - QuickList: Modified QuickList.
 
-### `self.merge(tab)`
-
+`self.merge(tab)`
 Merges a copy of this table with another. Appends the values to the end.
 
 **Parameters:**
@@ -141,8 +133,7 @@ Merges a copy of this table with another. Appends the values to the end.
 **Returns:**
 - QuickList: Merged QuickList.
 
-### `self.rep(value, times)`
-
+`self.rep(value, times)`
 Adds a value multiple times to the end.
 
 **Parameters:**
@@ -152,8 +143,7 @@ Adds a value multiple times to the end.
 **Returns:**
 - QuickList: Modified QuickList.
 
-### `self.remove(pos)`
-
+`self.remove(pos)`
 Removes a value at a specific position.
 
 **Parameters:**
@@ -162,8 +152,7 @@ Removes a value at a specific position.
 **Returns:**
 - QuickList: Modified QuickList.
 
-### `self.pop(pos)`
-
+`self.pop(pos)`
 Removes the value at a specific position and returns it.
 
 **Parameters:**
@@ -172,8 +161,7 @@ Removes the value at a specific position and returns it.
 **Returns:**
 - Value: Removed value.
 
-### `self.move(pos1, pos2)`
-
+`self.move(pos1, pos2)`
 Moves a value from one position/index to another.
 
 **Parameters:**
@@ -183,15 +171,13 @@ Moves a value from one position/index to another.
 **Returns:**
 - QuickList: Modified QuickList.
 
-### `self.reverse()`
-
+`self.reverse()`
 Returns a reversed copy of the table.
 
 **Returns:**
 - QuickList: Reversed copy of the table.
 
-### `self.string(str, sep)`
-
+`self.string(str, sep)`
 Splits a string into a QuickList.
 
 **Parameters:**
@@ -201,8 +187,7 @@ Splits a string into a QuickList.
 **Returns:**
 - QuickList: Resulting QuickList.
 
-### `self.find(value)`
-
+`self.find(value)`
 Checks if a value exists in the table. Returns the index if found, otherwise returns nil.
 
 **Parameters:**
@@ -211,8 +196,7 @@ Checks if a value exists in the table. Returns the index if found, otherwise ret
 **Returns:**
 - Index or nil.
 
-### `self.occurrences(value)`
-
+`self.occurrences(value)`
 Gets the number of times a value shows up in the table.
 
 **Parameters:**
@@ -221,50 +205,43 @@ Gets the number of times a value shows up in the table.
 **Returns:**
 - Count of occurrences.
 
-### `self.unique()`
-
+`self.unique()`
 Returns a copy of the table with unique values.
 
 **Returns:**
 - QuickList: Modified QuickList.
 
-### `self.get_dictionary()`
-
+`self.get_dictionary()`
 Returns a dictionary where values are indexed by [1], [2], etc.
 
 **Returns:**
 - table: Dictionary.
 
-### `self.shuffle()`
-
+`self.shuffle()`
 Returns a shuffled copy of the table.
 
 **Returns:**
 - QuickList: Shuffled copy of the table.
 
-### `self.random()`
-
+`self.random()`
 Gets a pseudo-random value from the table.
 
 **Returns:**
 - Value: Random value.
 
-### `self.flatten()`
-
+`self.flatten()`
 Returns a new QuickList by flattening nested tables.
 
 **Returns:**
 - QuickList: Flattened QuickList.
 
-### `self.average()`
-
+`self.average()`
 Gets the average of all number values inside the table.
 
 **Returns:**
 - number: Average value.
 
-### `self.startsWith(tab)`
-
+`self.startsWith(tab)`
 Checks if the QuickList starts with a given sequence (table) of elements.
 
 **Parameters:**
@@ -273,8 +250,7 @@ Checks if the QuickList starts with a given sequence (table) of elements.
 **Returns:**
 - boolean: True if the QuickList starts with the sequence, otherwise false.
 
-### `self.endsWith(tab)`
-
+`self.endsWith(tab)`
 Checks if the QuickList ends with a given sequence (table) of elements.
 
 **Parameters:**
@@ -283,12 +259,10 @@ Checks if the QuickList ends with a given sequence (table) of elements.
 **Returns:**
 - boolean: True if the QuickList ends with the sequence, otherwise false.
 
-### `self.checkql(tab)`
-
+`self.checkql(tab)`
 **Returns:**
 - boolean: True if the table provided is a QuickList
 
-### `self.sum()`
-
+`self.sum()`
 **Returns:**
 - number: Adds all the number values in the list and gives the sum.
