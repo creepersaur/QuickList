@@ -19,9 +19,9 @@ QuickList = "creepersaur/quicklist@^1.0"
 ```
 
 # Example
-```lua
-local _ = require('QuickList')
-local myTable = _{
+```luau
+local ql = require('QuickList')
+local myTable: ql.QuickList = ql {
     'Hello',
     "World",
     123
