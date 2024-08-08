@@ -89,7 +89,7 @@ function setupCustom()
 	--[[Insert a value at a specific index. Anything infront will be pushed forward.
     () : self
     ]]
-	function customMethods.insert(self: QuickList & { t: any }, pos, value): QuickList
+	function customMethods.insert(self, pos, value): QuickList
 		if pos and not value then
 			warn("Position was given (ql.insert()) but value was not. Did you want `ql.append()` ?")
 		end
@@ -148,7 +148,7 @@ function setupCustom()
 	end
 
 	--Loop through the list. Callback ( v:Value ).
-	function customMethods.forEach(self: QuickList & { t: any }, func): QuickList
+	function customMethods.forEach(self, func): QuickList
 		for i = 1, #self.t do
 			if func then
 				func(self.t[i])
@@ -158,7 +158,7 @@ function setupCustom()
 	end
 
 	--Loop through the list. Callback ( i:Index, v:Value ).
-	function customMethods.enumerate(self: QuickList & { t: any }, func): QuickList
+	function customMethods.enumerate(self, func): QuickList
 		for i = 1, #self.t do
 			if func then
 				func(i, self.t[i])
@@ -183,8 +183,16 @@ function setupCustom()
 		return copy
 	end
 
+	function customMethods.retain(self, func)
+		self.reverse().enumerate(function(i,v)
+			if not func(i,v) then
+				self.remove(i)
+			end
+		end)
+	end
+
 	--Add a value multiple times to the end.
-	function customMethods.rep(self: QuickList & { t: any }, value, times): QuickList
+	function customMethods.rep(self, value, times): QuickList
 		times = times or 1
 		for _ = 1, times do
 			self.append(value)
@@ -193,7 +201,7 @@ function setupCustom()
 	end
 
 	--Remove a value at position.
-	function customMethods.remove(self: QuickList & { t: any }, pos): QuickList
+	function customMethods.remove(self, pos): QuickList
 		if tonumber(pos) then
 			table.remove(self.t, pos)
 		else
@@ -215,7 +223,7 @@ function setupCustom()
 	end
 
 	--Move a value from 1 position/index to another.
-	function customMethods.move(self: QuickList & { t: any }, pos1, pos2): QuickList
+	function customMethods.move(self, pos1, pos2): QuickList
 		self.insert(pos2, self.pop(pos1))
 		return self
 	end
@@ -231,7 +239,7 @@ function setupCustom()
 
 	--Split a string into a QuickList
 	-- (string:string, sep:string) : QuickList
-	function customMethods.string(_self: QuickList & { t: any }, str, sep): QuickList
+	function customMethods.string(_self, str, sep): QuickList
 		sep = sep or " "
 		local result = ql.new()
 		for match in (str .. sep):gmatch("(.-)" .. sep) do
