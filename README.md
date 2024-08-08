@@ -37,232 +37,249 @@ Output:
 
 ## QuickList Class
 
-### `require(path_to_quicklist)`
-Returns the `Quicklist` export type and `new()` in the same require.
-```luau
-local ql = require(path)
-ql.Quicklist -- this is the type
-ql() or ql{} -- create a new quicklist
-```
+> [!NOTE]
+> #### `require(path_to_quicklist)`
+> Returns the `Quicklist` export type and `new()` in the same require.
+> ```luau
+> local ql = require(path)
+> ql.Quicklist -- this is the type
+> ql() or ql{} -- create a new quicklist
+> ```
 
-`ql.new(_table)`
-Creates a new 'QuickList' array. Use `ql{values}` to make it easier to create a QuickList.
+> [!NOTE]
+> `ql.new(_table)`
+> Creates a new 'QuickList' array. Use `ql{values}` to make it easier to create a QuickList.
+> **Parameters:**
+> > - `_table`: A QuickList or table (optional).
+> 
+> **Returns:**
+> - `QuickList`: A new QuickList array.
 
+> [!NOTE]
+> `self.copy()`
+> Creates a shallow copy of the table.
+> 
+> **Returns:**
+> - `QuickList`: A copy of the QuickList.
+
+> [!NOTE]
+> `self> .insert(pos, value)`
+> Inserts a value at a specific index. Anything in front will be pushed forward.
+> **Parameters:**
+> - `pos`: Index to insert the value.
+> - `value`: Value to insert.
+> 
+> **Returns:**
+> - `QuickList`: Modified QuickList.
+
+> [!NOTE]
+> `self.append(value)`
+> Inserts a value at the end of the table.
 **Parameters:**
-- `_table`: A QuickList or table (optional).
+> - `value`: Value to append.
+> 
+> **Returns:**
+> - `QuickList`: Modified QuickList.
 
-**Returns:**
-- QuickList: A new QuickList array.
-
-`self.copy()`
-Creates a shallow copy of the table.
-
-**Returns:**
-- QuickList: A copy of the QuickList.
-
-`self.insert(pos, value)`
-Inserts a value at a specific index. Anything in front will be pushed forward.
-
+> [!NOTE]
+> `self.join(sep)`
+> Joins the table using a separator. (Optional)
 **Parameters:**
-- `pos`: Index to insert the value.
-- `value`: Value to insert.
+> - `sep`: Separator (optional).
+> 
+> **Returns:**
+> - `string`: Joined string.
 
-**Returns:**
-- QuickList: Modified QuickList.
-
-`self.append(value)`
-Inserts a value at the end of the table.
-
+> [!NOTE]
+> `self.split(index)`
+> Splits the table into two tables using an index.
 **Parameters:**
-- `value`: Value to append.
+> - `index`: Index to split the table.
+> 
+> **Returns:**
+> - `QuickList`: Two tables resulting from the split.
 
-**Returns:**
-- QuickList: Modified QuickList.
-
-`self.join(sep)`
-Joins the table using a separator. (Optional)
-
+> [!NOTE]
+> `self.sort(comp)`
+> Returns > a sorted copy of the table. Use the parameter "descending" to sort descending or provide a custom comparison function.
 **Parameters:**
-- `sep`: Separator (optional).
+> - `comp`: Comparison function or "descending" (optional).
+> 
+> **Returns:**
+> - `QuickList`: Sorted > copy of the table.
 
-**Returns:**
-- string: Joined string.
-
-`self.split(index)`
-Splits the table into two tables using an index.
-
+> [!NOTE]
+> `self.forEach(func)`
+> Loops through the list. Callback `(v:Value)`.
 **Parameters:**
-- `index`: Index to split the table.
+> - `func`: Callback function.
+> 
+> **Returns:**
+> - `QuickList`: Modified QuickList> .
 
-**Returns:**
-- QuickList: Two tables resulting from the split.
-
-`self.sort(comp)`
-Returns a sorted copy of the table. Use the parameter "descending" to sort descending or provide a custom comparison function.
-
+> [!NOTE]
+> `self.enumerate(func)`
+> Loops through the list. Callback `(i:Index, v:Value)`.
 **Parameters:**
-- `comp`: Comparison function or "descending" (optional).
+> - `func`: Callback function.
+> 
+> **Returns:**
+> - `QuickList`: Modified QuickList.
 
-**Returns:**
-- QuickList: Sorted copy of the table.
-
-`self.forEach(func)`
-Loops through the list. Callback `(v:Value)`.
-
+> [!NOTE]
+> `self.merge(tab)`
+> Merges a copy of this table with another. Appends the values to the end.
 **Parameters:**
-- `func`: Callback function.
+> - `tab`: Another QuickList or table.
+> 
+> **Returns:**
+> - `> QuickList`: Merged QuickList.
 
-**Returns:**
-- QuickList: Modified QuickList.
-
-`self.enumerate(func)`
-Loops through the list. Callback `(i:Index, v:Value)`.
-
+> [!NOTE]
+> `self.rep(value, times)`
+Adds a value multiple times to the en> d.
 **Parameters:**
-- `func`: Callback function.
+> - `value`: Value to repeat.
+> - `times`: Number of times to repeat (optional, default is 1).
+> 
+> **Returns:**
+> > - `QuickList`: Modified QuickList.
 
-**Returns:**
-- QuickList: Modified QuickList.
-
-`self.merge(tab)`
-Merges a copy of this table with another. Appends the values to the end.
-
+> [!NOTE]
+> `self.remove(pos)`
+Removes a value at a specific positio> n.
 **Parameters:**
-- `tab`: Another QuickList or table.
+> - `pos`: Position to remove.
+> 
+> **Returns:**
+> - `> QuickList`: Modified QuickList.
 
-**Returns:**
-- QuickList: Merged QuickList.
-
-`self.rep(value, times)`
-Adds a value multiple times to the end.
-
+> [!NOTE]
+> `self.pop(pos)`
+Removes the value at a specific position and returns i> t.
 **Parameters:**
-- `value`: Value to repeat.
-- `times`: Number of times to repeat (optional, default is 1).
+> - `pos`: Position to pop.
+> 
+> **Returns:**
+- `Value`: > Removed value.
 
-**Returns:**
-- QuickList: Modified QuickList.
-
-`self.remove(pos)`
-Removes a value at a specific position.
-
+> [!NOTE]
+> `self.move(pos1, pos2)`
+Moves a value from one position/index to anothe> r.
 **Parameters:**
-- `pos`: Position to remove.
+> - `pos1`: Source position.
+> - `pos2`: Destination position.
+> 
+> **Returns:**
+> - `QuickList`: Modified QuickList.
 
-**Returns:**
-- QuickList: Modified QuickList.
+> [!NOTE]
+> `self.reverse()`
+Returns a reversed copy of the tabl> e.
+> 
+> **Returns:**
+> - `QuickList> `: Reversed copy of the table.
 
-`self.pop(pos)`
-Removes the value at a specific position and returns it.
-
+> [!NOTE]
+> `self.string(str, sep)`
+Splits a string into a QuickLis> t.
 **Parameters:**
-- `pos`: Position to pop.
+> - `str`: Input string.
+> - `sep`: Separator (optional).
+> 
+> **Returns:**
+> - `QuickList`: Resulting QuickList.
 
-**Returns:**
-- Value: Removed value.
-
-`self.move(pos1, pos2)`
-Moves a value from one position/index to another.
-
+> [!NOTE]
+> `self.> find(value)`
+Checks if a value exists in the table. Returns the index if found, otherwise returns > nil.
 **Parameters:**
-- `pos1`: Source position.
-- `pos2`: Destination position.
+> - `value`: Value to find.
+> 
+> **Returns:**
+> - `Index` or > `nil`.
 
-**Returns:**
-- QuickList: Modified QuickList.
-
-`self.reverse()`
-Returns a reversed copy of the table.
-
-**Returns:**
-- QuickList: Reversed copy of the table.
-
-`self.string(str, sep)`
-Splits a string into a QuickList.
-
+> [!NOTE]
+> `self.occurrences(value)`
+Gets the number of times a value shows up in the tabl> e.
 **Parameters:**
-- `str`: Input string.
-- `sep`: Separator (optional).
+> - `value`: Value to count.
+> 
+> **Returns:**
+> - `number`.
 
-**Returns:**
-- QuickList: Resulting QuickList.
+> [!NOTE]
+> `self.unique()`
+Returns a copy of the table with unique value> s.
+> 
+> **Returns:**
+> - `QuickList`: Modified QuickList.
 
-`self.find(value)`
-Checks if a value exists in the table. Returns the index if found, otherwise returns nil.
+> [!NOTE]
+> `self.get_dictionary()`
+Returns a dictionary where values are indexed by [1], [2], et> c.
+> 
+> **Returns:**
+> - `table`: Dictionary.
 
+> [!NOTE]
+> `self.shuffle()`
+Returns a shuffled copy of the tabl> e.
+> 
+> **Returns:**
+> - `QuickList`: Shuffled copy of the table.
+
+> [!NOTE]
+> `self.random()`
+Gets a pseudo-random value from the tabl> e.
+> 
+> **Returns:**
+- `Value`: Random value.
+
+> [!NOTE]
+> `self.flatten()`
+Returns a new QuickList by flattening nested table> s.
+> 
+> **Returns:**
+> - `QuickList`: Flattened QuickList.
+
+> [!NOTE]
+> `self.average()`
+Gets the average of all number values inside the tabl> e.
+> 
+> **Returns:**
+> - `number`: Average value> .
+
+> [!NOTE]
+> `self.startsWith(tab)`
+Checks if the QuickList starts with a given sequence (table) of element> s.
 **Parameters:**
-- `value`: Value to find.
+> - `tab`: Sequence to check.
+> 
+> **Returns:**
+> - `boolean`: True if the QuickList starts with the sequence, otherwise false> .
 
-**Returns:**
-- Index or nil.
+> [!NOTE]
+> `self.endsWith(tab)`
+> Checks if the QuickList ends with a given sequence (table) of element> s.
+> **Parameters:**
+> - `tab`: Sequence to check.
+> 
+> **Returns:**
+> - `boolean`: True if the QuickList ends with the sequence, otherwise false.
 
-`self.occurrences(value)`
-Gets the number of times a value shows up in the table.
+> [!NOTE]
+> `self.checkql(tab)`> 
+> **Returns:> **
+> - `boolean`: True if the table provided is a QuickList
 
-**Parameters:**
-- `value`: Value to count.
+> [!NOTE]
+> `self.sum()`> 
+> **Returns: **
+> - `number`: Adds all the number values in the list and gives the sum.
 
-**Returns:**
-- Count of occurrences.
-
-`self.unique()`
-Returns a copy of the table with unique values.
-
-**Returns:**
-- QuickList: Modified QuickList.
-
-`self.get_dictionary()`
-Returns a dictionary where values are indexed by [1], [2], etc.
-
-**Returns:**
-- table: Dictionary.
-
-`self.shuffle()`
-Returns a shuffled copy of the table.
-
-**Returns:**
-- QuickList: Shuffled copy of the table.
-
-`self.random()`
-Gets a pseudo-random value from the table.
-
-**Returns:**
-- Value: Random value.
-
-`self.flatten()`
-Returns a new QuickList by flattening nested tables.
-
-**Returns:**
-- QuickList: Flattened QuickList.
-
-`self.average()`
-Gets the average of all number values inside the table.
-
-**Returns:**
-- number: Average value.
-
-`self.startsWith(tab)`
-Checks if the QuickList starts with a given sequence (table) of elements.
-
-**Parameters:**
-- `tab`: Sequence to check.
-
-**Returns:**
-- boolean: True if the QuickList starts with the sequence, otherwise false.
-
-`self.endsWith(tab)`
-Checks if the QuickList ends with a given sequence (table) of elements.
-
-**Parameters:**
-- `tab`: Sequence to check.
-
-**Returns:**
-- boolean: True if the QuickList ends with the sequence, otherwise false.
-
-`self.checkql(tab)`
-**Returns:**
-- boolean: True if the table provided is a QuickList
-
-`self.sum()`
-**Returns:**
-- number: Adds all the number values in the list and gives the sum.
+> [!NOTE]
+> `self.retain()`> 
+> Deletes the item inside the QuickList if the function returns false for that item.
+> **parameters**
+> - `func(i: number, v: any)`
