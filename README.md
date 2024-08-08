@@ -9,9 +9,16 @@
 QuickList is a Lua (class) library for managing arrays efficiently. It provides a set of functions for manipulating arrays in a concise and expressive manner.
 This was made by creepersaur. Go and subscribe to him on [Youtube](https://youtube.com/c/creepersaur).
 
-# Usage
+# Installation
 Download the `QuickList.lua` from the source code. Or use releases if an *older* version is there.
 Just `require(path)` to the QuickList module. Then use the returned value to make lists. Name the variable anything, but it's best to name it something short (such as ql or underscore)
+
+If you use Wally for managing packages, you can install it using the following line:
+```toml
+Moonlite = "maximumadhd/moonlite@0.9.0"
+```
+
+# Example
 ```lua
 local _ = require('QuickList')
 local myTable = _{
