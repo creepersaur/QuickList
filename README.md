@@ -15,7 +15,7 @@ Just `require(path)` to the QuickList module. Then use the returned value to mak
 
 If you use Wally for managing packages, you can install it using the following line:
 ```toml
-QuickList = "creepersaur/quicklist@1.0^"
+QuickList = "creepersaur/quicklist@^1.0"
 ```
 
 # Example
