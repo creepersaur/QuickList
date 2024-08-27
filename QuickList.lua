@@ -1,4 +1,4 @@
-ql = {}
+local ql = {}
 
 function flattenTable(tab)
 	local flat = {}
@@ -376,6 +376,24 @@ function setupCustom()
 		end)
 		return self
 	end
+
+	function customMethods.first(self)
+		if #self > 0 then
+            return self[1]
+        end
+	end
+
+	function customMethods.last(self)
+		if #self > 0 then
+            return self[#self]
+        end
+	end
+
+    function customMethods.execN(self, amount: number, func: (i: number) -> any)
+        for i = 1, amount do
+            self.append(func(i))
+        end
+    end
 end
 
 setupCustom()
