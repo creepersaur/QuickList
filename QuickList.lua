@@ -1,4 +1,41 @@
-local ql = {}
+ql = {}
+
+export type QuickList = {
+	t: { [number]: any },
+	copy: (self: QuickList) -> QuickList,
+	insert: (self: QuickList, pos: number?, value: any) -> QuickList,
+	append: (self: QuickList, ...any) -> QuickList,
+	append_table: (self: QuickList, _table: { [any]: any }) -> QuickList,
+	join: (self: QuickList, sep: string?) -> string,
+	split: (self: QuickList, index: number?) -> QuickList,
+	sort: (self: QuickList, comp: ((any, any) -> boolean) | "descending"?) -> QuickList,
+	forEach: (self: QuickList, func: (v: any) -> ()) -> QuickList,
+	enumerate: (self: QuickList, func: (i: number, v: any) -> ()) -> QuickList,
+	merge: (self: QuickList, tab: QuickList | { [any]: any }) -> QuickList,
+	retain: (self: QuickList, func: (i: number, v: any) -> boolean) -> (),
+	rep: (self: QuickList, value: any, times: number?) -> QuickList,
+	remove: (self: QuickList, pos: number | any) -> QuickList,
+	pop: (self: QuickList, pos: number) -> any,
+	move: (self: QuickList, pos1: number, pos2: number) -> QuickList,
+	reverse: (self: QuickList) -> QuickList,
+	string: (self: QuickList, str: string, sep: string?) -> QuickList,
+	find: (self: QuickList, value: any) -> number?,
+	occurrences: (self: QuickList, value: any) -> number,
+	unique: (self: QuickList) -> QuickList,
+	get_table: (self: QuickList) -> { [number]: any },
+	shuffle: (self: QuickList) -> QuickList,
+	random: (self: QuickList) -> any,
+	flatten: (self: QuickList) -> QuickList,
+	average: (self: QuickList) -> number,
+	startsWith: (self: QuickList, tab: { [any]: any }) -> boolean,
+	endsWith: (self: QuickList, tab: { [any]: any }) -> boolean,
+	checkql: (self: QuickList, tab: any) -> boolean,
+	sum: (self: QuickList) -> number,
+	setEach: (self: QuickList, func: (i: number, v: any) -> any) -> QuickList,
+	first: (self: QuickList) -> any?,
+	last: (self: QuickList) -> any?,
+	execN: (self: QuickList, amount: number, func: (i: number) -> any) -> (),
+}
 
 function flattenTable(tab)
 	local flat = {}
@@ -75,8 +112,6 @@ function concat_table(self, sep, scope)
 end
 
 local customMethods = {}
-
-export type QuickList = typeof(customMethods)
 
 function setupCustom()
 	--[[This creates a shallow copy of the table
@@ -184,8 +219,8 @@ function setupCustom()
 	end
 
 	function customMethods.retain(self, func)
-		self.reverse().enumerate(function(i,v)
-			if not func(i,v) then
+		self.reverse().enumerate(function(i, v)
+			if not func(i, v) then
 				self.remove(i)
 			end
 		end)
@@ -379,21 +414,23 @@ function setupCustom()
 
 	function customMethods.first(self)
 		if #self > 0 then
-            return self[1]
-        end
+			return self[1]
+		end
+		return
 	end
 
 	function customMethods.last(self)
 		if #self > 0 then
-            return self[#self]
-        end
+			return self[#self]
+		end
+		return
 	end
 
-    function customMethods.execN(self, amount: number, func: (i: number) -> any)
-        for i = 1, amount do
-            self.append(func(i))
-        end
-    end
+	function customMethods.execN(self, amount: number, func: (i: number) -> any)
+		for i = 1, amount do
+			self.append(func(i))
+		end
+	end
 end
 
 setupCustom()
