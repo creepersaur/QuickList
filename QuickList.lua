@@ -3,6 +3,7 @@ ql = {}
 export type QuickList = {
 	t: { [number]: any },
 	copy: (self: QuickList) -> QuickList,
+	deep_copy: (self: QuickList) -> QuickList,
 	insert: (self: QuickList, pos: number?, value: any) -> QuickList,
 	append: (self: QuickList, ...any) -> QuickList,
 	append_table: (self: QuickList, _table: { [any]: any }) -> QuickList,
