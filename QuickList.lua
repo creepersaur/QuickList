@@ -121,6 +121,20 @@ function setupCustom()
 		return ql.new(self.t)
 	end
 
+    --[[This creates a deep copy of the table
+       self.copy() : QuickList
+    ]]
+    function customMethods.deep_copy(self)
+	    local copy = ql{}
+	    for k, v in self do
+	        if type(v) == "table" then
+	            v = customMethods.deep_copy(v)
+	        end
+	        self[k] = v
+	    end
+	    return copy
+	end
+
 	--[[Insert a value at a specific index. Anything infront will be pushed forward.
     () : self
     ]]
