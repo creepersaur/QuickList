@@ -2,40 +2,40 @@ ql = {}
 
 export type QuickList = {
 	t: { [number]: any },
-	copy: (self: QuickList) -> QuickList,
-	deep_copy: (self: QuickList) -> QuickList,
-	insert: (self: QuickList, pos: number?, value: any) -> QuickList,
-	append: (self: QuickList, ...any) -> QuickList,
-	append_table: (self: QuickList, _table: { [any]: any }) -> QuickList,
-	join: (self: QuickList, sep: string?) -> string,
-	split: (self: QuickList, index: number?) -> QuickList,
-	sort: (self: QuickList, comp: ((any, any) -> boolean) | "descending"?) -> QuickList,
-	forEach: (self: QuickList, func: (v: any) -> ()) -> QuickList,
-	enumerate: (self: QuickList, func: (i: number, v: any) -> ()) -> QuickList,
-	merge: (self: QuickList, tab: QuickList | { [any]: any }) -> QuickList,
-	retain: (self: QuickList, func: (i: number, v: any) -> boolean) -> (),
-	rep: (self: QuickList, value: any, times: number?) -> QuickList,
-	remove: (self: QuickList, pos: number | any) -> QuickList,
-	pop: (self: QuickList, pos: number) -> any,
-	move: (self: QuickList, pos1: number, pos2: number) -> QuickList,
-	reverse: (self: QuickList) -> QuickList,
-	string: (self: QuickList, str: string, sep: string?) -> QuickList,
-	find: (self: QuickList, value: any) -> number?,
-	occurrences: (self: QuickList, value: any) -> number,
-	unique: (self: QuickList) -> QuickList,
-	get_table: (self: QuickList) -> { [number]: any },
-	shuffle: (self: QuickList) -> QuickList,
-	random: (self: QuickList) -> any,
-	flatten: (self: QuickList) -> QuickList,
-	average: (self: QuickList) -> number,
-	startsWith: (self: QuickList, tab: { [any]: any }) -> boolean,
-	endsWith: (self: QuickList, tab: { [any]: any }) -> boolean,
-	checkql: (self: QuickList, tab: any) -> boolean,
-	sum: (self: QuickList) -> number,
-	setEach: (self: QuickList, func: (i: number, v: any) -> any) -> QuickList,
-	first: (self: QuickList) -> any?,
-	last: (self: QuickList) -> any?,
-	execN: (self: QuickList, amount: number, func: (i: number) -> any) -> (),
+	copy: () -> QuickList,
+	deep_copy: () -> QuickList,
+	insert: (pos: number?, value: any) -> QuickList,
+	append: (...any) -> QuickList,
+	append_table: (_table: { [any]: any }) -> QuickList,
+	join: (sep: string?) -> string,
+	split: (index: number?) -> QuickList,
+	sort: (comp: ((any, any) -> boolean) | "descending"?) -> QuickList,
+	forEach: (func: (v: any) -> ()) -> QuickList,
+	enumerate: (func: (i: number, v: any) -> ()) -> QuickList,
+	merge: (tab: QuickList | { [any]: any }) -> QuickList,
+	retain: (func: (i: number, v: any) -> boolean, should_remove: boolean?) -> QuickList,
+	rep: (value: any, times: number?) -> QuickList,
+	remove: (pos: number | any) -> QuickList,
+	pop: (pos: number) -> any,
+	move: (pos1: number, pos2: number) -> QuickList,
+	reverse: () -> QuickList,
+	string: (str: string, sep: string?) -> QuickList,
+	find: (value: any) -> number?,
+	occurrences: (value: any) -> number,
+	unique: () -> QuickList,
+	get_table: () -> { [number]: any },
+	shuffle: () -> QuickList,
+	random: () -> any,
+	flatten: () -> QuickList,
+	average: () -> number,
+	startsWith: (tab: { [any]: any }) -> boolean,
+	endsWith: (tab: { [any]: any }) -> boolean,
+	checkql: (tab: any) -> boolean,
+	sum: () -> number,
+	setEach: (func: (i: number, v: any) -> any) -> QuickList,
+	first: () -> any?,
+	last: () -> any?,
+	execN: (amount: number, func: (i: number) -> any) -> (),
 }
 
 function flattenTable(tab)
@@ -98,6 +98,7 @@ function concat_dictionary(tab, sep, scope)
 end
 
 function concat_table(self, sep, scope)
+	scope -= 1
 	local array = true
 	for i, _ in self do
 		if type(i) ~= "number" then
@@ -122,18 +123,18 @@ function setupCustom()
 		return ql.new(self.t)
 	end
 
-    --[[This creates a deep copy of the table
+	--[[This creates a deep copy of the table
        self.copy() : QuickList
     ]]
-    function customMethods.deep_copy(self)
-	    local copy = ql{}
-	    for k, v in self do
-	        if type(v) == "table" then
-	            v = customMethods.deep_copy(v)
-	        end
-	        self[k] = v
-	    end
-	    return copy
+	function customMethods.deep_copy(self)
+		local copy = ql {}
+		for k, v in self do
+			if type(v) == "table" then
+				v = customMethods.deep_copy(v)
+			end
+			self[k] = v
+		end
+		return copy
 	end
 
 	--[[Insert a value at a specific index. Anything infront will be pushed forward.
@@ -141,7 +142,7 @@ function setupCustom()
     ]]
 	function customMethods.insert(self, pos, value): QuickList
 		if pos and not value then
-			warn("Position was given (ql.insert()) but value was not. Did you want `ql.append()` ?")
+			warn "Position was given (ql.insert()) but value was not. Did you want `ql.append()` ?"
 		end
 		pos = pos or #self.t + 1
 		table.insert(self.t, pos, value)
@@ -176,9 +177,9 @@ function setupCustom()
 	--[[Split the table into 2 tables using an index.
     () : QuickList:{QuickList, QuickList}
     ]]
-	function customMethods.split(self, index): QuickList
+	function customMethods.split(self, index): (QuickList, QuickList)
 		index = index or math.ceil(#self / 2)
-		return ql.new({ self({ 1, index }), self({ index + 1, #self }) })
+		return self { 1, index }, self { index + 1, #self }
 	end
 
 	--[[Returns a sorted copy of the table.
@@ -222,23 +223,35 @@ function setupCustom()
     ]]
 	function customMethods.merge(self, tab): QuickList
 		assert(type(tab) == "table", "A QuickList or table must be provided.")
+		local copy = self.copy()
+
 		if not checkql(tab) then
-			tab = ql.new(tab)
+			copy.append(table.unpack(tab))
+			return copy
 		end
 
-		local copy = self.copy()
-		tab.forEach(function(v)
-			copy.append(v)
-		end)
+		copy.append(table.unpack(tab:get_table()))
 		return copy
 	end
 
-	function customMethods.retain(self, func)
-		self.reverse().enumerate(function(i, v)
-			if not func(i, v) then
-				self.remove(i)
+	function customMethods.retain(self: QuickList, func, should_remove)
+		if should_remove then
+			for i = #self.t, 1, -1 do
+				if not func(i, self[i]) then
+					self.remove(i)
+				end
 			end
-		end)
+			return self
+		else
+			local newTable = {}
+			self.enumerate(function(i, v)
+				if func(i, v) then
+					-- print(v)
+					table.insert(newTable, v)
+				end
+			end)
+			return ql.new(nil, newTable)
+		end
 	end
 
 	--Add a value multiple times to the end.
@@ -462,7 +475,7 @@ function ql.new(_self, _table): QuickList
 		_table = _table.t
 	end
 
-	local self = { t = _table or {} } :: QuickList
+	local self = { t = _table } :: QuickList
 	self = setmetatable(self, ql)
 
 	return self
