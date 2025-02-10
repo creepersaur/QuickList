@@ -21,7 +21,8 @@ export type QuickList = {
 	reverse: () -> QuickList,
 	string: (str: string, sep: string?) -> QuickList,
 	find: (value: any) -> number?,
-	occurrences: (value: any) -> number,
+	count: (value: any) -> number,
+	count_by: (func: (any) -> boolean?) -> number,
 	unique: () -> QuickList,
 	get_table: () -> { [number]: any },
 	shuffle: () -> QuickList,
@@ -326,14 +327,26 @@ function setupCustom()
 	end
 
 	--Get how many times a value shows up in the table.
-	function customMethods.occurrences(self, value): number
-		local occurrences = 0
+	function customMethods.count(self, value): number
+		local count = 0
 		self.forEach(function(v)
 			if v == value then
-				occurrences = occurrences + 1
+				count = count + 1
 			end
 		end)
-		return occurrences
+		return count
+	end
+
+	--Get how many times a value shows up in the table.
+	--Using a custom count function: ((object) -> true)
+	function customMethods.count_by(self, func): number
+		local count = 0
+		self.forEach(function(v)
+			if func(v) then
+				count = count + 1
+			end
+		end)
+		return count
 	end
 
 	--Return a copy of this table with unique values.
