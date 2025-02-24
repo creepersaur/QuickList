@@ -9,7 +9,7 @@ export type QuickList<T> = {
 	append_table: (_table: { [T]: T }) -> QuickList<T>,
 	join: (sep: string?) -> string,
 	split: (index: number?) -> QuickList<T>,
-	sort: (comp: ((T, T) -> boolean) | "descending"?) -> QuickList<T>,
+	sort: (comp: ((T, T) -> boolean) | ("descending"|"desc")?) -> QuickList<T>,
 	forEach: (func: (v: T) -> ()) -> QuickList<T>,
 	enumerate: (func: (i: number, v: T) -> ()) -> QuickList<T>,
 	merge: (tab: QuickList<T> | { [T]: T }) -> QuickList<T>,
@@ -199,11 +199,11 @@ function setupCustom()
 	end
 
 	--[[Returns a sorted copy of the table.
-    Use the parameter "descending" to sort descending or provide a function(a,b).
+    Use the parameter "descending" or "desc" to sort descending or provide a function(a,b).
     (Comparison:(Optional)) : QuickList<T>
     ]]
 	function customMethods.sort<T>(self, comp): QuickList<T>
-		if comp == "descending" then
+		if comp == "descending" or comp == "desc" then
 			comp = function(a, b)
 				return b < a
 			end
